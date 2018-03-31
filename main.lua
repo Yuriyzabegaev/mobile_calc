@@ -3,27 +3,27 @@
 -- main.lua
 --
 -----------------------------------------------------------------------------------------
+require("mobdebug").start()
+Runtime:addEventListener("enterFrame", function(event) pcall(onUpdate, event) end)
 
-local background = display.newImageRect( "background.png", 360, 570 )
+require("display")
+local background = display.newImageRect("background.png", 360, 570)
 background.x = display.contentCenterX
 background.y = display.contentCenterY
 
-local buttons = require("buttons")
-local make_button = buttons.button
+local B = require("buttons")
+local utils = require("utils")
+local buttons = B.buttons
+
+local buttonsList = { { "AC", "BC", "%", "div" },
+                          { "7", "8", "9", "*" },
+                          { "4", "5", "6", "-" },
+                          { "1", "2", "3", "+" },
+                          { "0", ",", "+/-", "=" } }
 
 
-local function buttons ()
-    local buttonsList = {}
-    
-    for i = 1, nButtons do
-        local x = i*10 + 50
-        local y = x
-        table.insert(buttonsList, make_button(text, x, y, sizeX, sizeY, color, colorTouch))
-    end
-    return buttonsList
-end
+local b = buttons(buttonsList, display.contentHeight/4)
 
-local arg_table = {1, 2, 3, 4}
 
 -- local sx = rect.contentWidth/text.contentWidth
 -- local sy = rect.contentHeight/text.contentHeight
