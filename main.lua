@@ -7,23 +7,39 @@ require("mobdebug").start()
 Runtime:addEventListener("enterFrame", function(event) pcall(onUpdate, event) end)
 
 require("display")
+local drawInputArea = require("inputArea").drawInputArea
+local B = require("buttons")
+utils = require("utils")
 local background = display.newImageRect("background.png", 360, 570)
 background.x = display.contentCenterX
 background.y = display.contentCenterY
 
-local B = require("buttons")
-local utils = require("utils")
-local buttons = B.buttons
 
-local buttonsList = { { "AC", "BC", "%", "div" },
+local buttonsGet = B.buttons
+
+local yInputSize = display.contentHeight/4
+local buttonsList = { { "(", ")", "C", "AC" },
                           { "7", "8", "9", "*" },
                           { "4", "5", "6", "-" },
                           { "1", "2", "3", "+" },
-                          { "0", ",", "+/-", "=" } }
+                          { "0", ",", "/", "=" } }
 
 
-local b = buttons(buttonsList, display.contentHeight/4)
+local b = buttonsGet(buttonsList, yInputSize)
+local i = drawInputArea(yInputSize)
+ 
+local function connectButtonsToInputOnClickEvent(buttons, input)
+  
+  function tapHandler (event)
+   input:insert(event.target.value)
+  end
+  for k, v in ipairs(buttons) do
+    v:addEventListener("tap", tapHandler)
+  end
+end
 
+
+connectButtonsToInputOnClickEvent(b, i)
 
 -- local sx = rect.contentWidth/text.contentWidth
 -- local sy = rect.contentHeight/text.contentHeight

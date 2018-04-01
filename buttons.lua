@@ -1,6 +1,9 @@
 local Module = {}
 
 
+-- local utils = require("utils")
+
+
 local function make_button(text, x, y, sizeX, sizeY, color, colorTouch, strokeColor, strokeWidth)
     local rect = display.newRect(x, y, sizeX, sizeY)
     rect.fillColor = { 0, 0, 0, 1 }
@@ -10,13 +13,12 @@ local function make_button(text, x, y, sizeX, sizeY, color, colorTouch, strokeCo
     rect.strokeWidth = strokeWidth
     rect:setFillColor(unpack((rect.fillColor)))
 
-    local l = 0.5 * ((rect.contentWidth > rect.contentHeight) and rect.contentWidth or rect.contentHeight)
+    local l = utils.getFontSize(rect)
 
     local text = display.newText(text, rect.x, rect.y, native.systemFont, l, "center")
 
     local function changeButtonColor(event)
 
-        print(event.phase)
         if event.phase == "began" then
             display.getCurrentStage():setFocus(event.target)
             event.target:setFillColor(unpack(rect.fillColorTouch))
@@ -32,6 +34,7 @@ local function make_button(text, x, y, sizeX, sizeY, color, colorTouch, strokeCo
 
     return rect
 end
+
 
 local function buttons (buttonsList, yMax)
 
@@ -68,18 +71,12 @@ local function buttons (buttonsList, yMax)
                                        defaultTouchColor,
                                        defaultStrokeColor,
                                        defaultStrokeWidth)
-            print(buttonStr[j],
-                                       buttonCenterX * 2 * (j) - buttonCenterX,
-                                       buttonCenterY * 2 * (i) - buttonCenterY,
-                                       buttonSizeX,
-                                       buttonSizeY,
-                                       defaultColor,
-                                       defaultTouchColor)
-            table.insert(buttons, {string.format("%d - %d", i, j)})
+            button.value = buttonStr[j]
+            table.insert(buttons, button)
 
         end
     end
-    return table
+    return buttons
 end
 
 
